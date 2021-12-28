@@ -4,17 +4,16 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.logical.taste.data.Repository
 import com.logical.taste.data.database.RecipesEntity
 import com.logical.taste.models.FoodRecipe
 import com.logical.taste.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
