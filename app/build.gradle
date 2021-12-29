@@ -65,10 +65,13 @@ dependencies {
 
     // Room components
     implementation "androidx.room:room-runtime:2.4.0"
-    annotationProcessor "androidx.room:room-compiler:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
     implementation "androidx.room:room-ktx:2.4.0"
     androidTestImplementation "androidx.room:room-testing:2.4.0"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+
+
+
 
 
 
@@ -115,11 +118,4 @@ dependencies {
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
-
-
-
-
-
-
-
 }
