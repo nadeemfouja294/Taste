@@ -6,7 +6,7 @@
     <data>
         <variable
             name="result"
-            type="com.logical.taste.models.Result" />
+            type="com.logical.taste.models.Result"/>
 
     </data>
 
@@ -49,6 +49,7 @@
                     android:layout_height="0dp"
                     loadImageFromUrl="@{result.image}"
                     android:scaleType="fitXY"
+                    android:padding="3dp"
                     app:shapeAppearanceOverlay="@style/rounded_image_style"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
