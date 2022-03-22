@@ -3,10 +3,12 @@ package com.logical.taste.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.logical.taste.data.database.entities.FavouriteEntity
+import com.logical.taste.data.database.entities.RecipesEntity
 
 
 @Database(
-    entities = [RecipesEntity::class],
+    entities = [RecipesEntity::class,FavouriteEntity::class],
     version = 1,
     exportSchema = false
 )

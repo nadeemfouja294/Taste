@@ -14,7 +14,8 @@
         android:id="@+id/recipesRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp">
+        android:layout_marginVertical="4dp"
+        onRecipeClickListener="@{result}">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/row_cardView"
@@ -65,8 +66,8 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="12dp"
                     tools:text="Nadeeeemmmmmmmmmmmmmmmmmjfvhfvhvjshvkjsdvkjdsvhdsjkvhsdkjvhdskjvhdskjvhdskjvhdsjvhdsjvhdsjvhdsjvhdskjvdsjkvhdjvhdlvjhdslvhdslvhdslvhdslvhds;vhds;vhovhw"
-                    android:autoSizeMaxTextSize="24dp"
-                    android:autoSizeMinTextSize="14dp"
+                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMinTextSize="14sp"
                     android:ellipsize="end"
                     android:fontFamily="@font/courgette"
                     android:maxLines="2"
@@ -86,10 +87,10 @@
                     android:layout_marginTop="6dp"
                     android:autoSizeMaxTextSize="22dp"
                     android:autoSizeMinTextSize="8dp"
+                    parseHtml="@{result.summary}"
                     android:ellipsize="end"
                     android:fontFamily="@font/roboto"
                     android:maxLines="3"
-                    android:text="@{result.summary}"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@id/title_textView"
                     app:layout_constraintStart_toStartOf="@id/title_textView"

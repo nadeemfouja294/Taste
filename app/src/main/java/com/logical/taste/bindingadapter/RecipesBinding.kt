@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.logical.taste.data.database.RecipesEntity
+import com.logical.taste.data.database.entities.RecipesEntity
 import com.logical.taste.models.FoodRecipe
 import com.logical.taste.util.NetworkResult
 

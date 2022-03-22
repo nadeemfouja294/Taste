@@ -13,17 +13,39 @@
         <action
             android:id="@+id/action_recipesFragment_to_recipesBottomSheet"
             app:destination="@id/recipesBottomSheet" />
+        <argument
+            android:name="backFromBottomSheet"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_recipesFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
     </fragment>
     <fragment
         android:id="@+id/favouriteRecipesFragment"
         android:name="com.logical.taste.ui.fragments.favourites.FavouriteRecipesFragment"
         android:label="Favourites"
-        tools:layout="@layout/fragment_favourite_recipes" />
+        tools:layout="@layout/fragment_favourite_recipes" >
+        <action
+            android:id="@+id/action_favouriteRecipesFragment_to_detailsActivity"
+            app:destination="@id/detailsActivity" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/foodJokeFragment"
         android:name="com.logical.taste.ui.fragments.foodjoke.FoodJokeFragment"
         android:label="Food Joke"
-        tools:layout="@layout/fragment_food_joke" />
+        tools:layout="@layout/fragment_food_joke" >
+<!--        <action-->
+<!--            android:id="@+id/action_favouriteRecipesFragment_to_detailsActivity"-->
+<!--            app:destination="@id/detailsActivity" />-->
+    </fragment>
+
+
+
+
+
     <dialog
         android:id="@+id/recipesBottomSheet"
         android:name="com.logical.taste.ui.fragments.recipes.bottomsheet.RecipesBottomSheet"
@@ -33,4 +55,13 @@
             android:id="@+id/action_recipesBottomSheet_to_recipesFragment"
             app:destination="@id/recipesFragment" />
     </dialog>
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="com.logical.taste.ui.activities.DetailsActivity"
+        android:label="Details"
+        tools:layout="@layout/activity_details" >
+        <argument
+            android:name="result"
+            app:argType="com.logical.taste.models.Result" />
+    </activity>
 </navigation>

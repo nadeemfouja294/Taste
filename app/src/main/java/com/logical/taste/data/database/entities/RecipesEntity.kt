@@ -1,4 +1,4 @@
-package com.logical.taste.data.database
+package com.logical.taste.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -7,7 +7,6 @@
     <string name="food_joke">Joke</string>
 
 
-
     // Bottom Sheet
     <string name="meal_type">Meal Type</string>
     <string name="main_course">Main Course</string>
@@ -34,5 +33,17 @@
     <string name="whole30">Whole30</string>
     <string name="diet_type">Diet Type</string>
     <string name="apply">Apply</string>
+    <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="summary">Summary</string>
+    <string name="cheap">Cheap</string>
+    <string name="healthy">Healthy</string>
+    <string name="dairy_free">Dairy Free</string>
+    <string name="title_detail">Title</string>
+    <string name="likes">100</string>
+    <string name="time">100</string>
+    <string name="save_to_favourite">Save to Favourite</string>
+    <string name="no_favourite_recipe">No Favourite Recipe</string>
 
 </resources>
