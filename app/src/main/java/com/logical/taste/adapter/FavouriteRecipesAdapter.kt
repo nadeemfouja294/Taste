@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.logical.taste.R
-import com.logical.taste.data.database.entities.FavouriteEntity
+import com.logical.taste.data.database.entities.FavouritesEntity
 import com.logical.taste.databinding.FavouriteRecipesRowLayoutBinding
 import com.logical.taste.ui.fragments.favourites.FavouriteRecipesFragmentDirections
 import com.logical.taste.util.RecipesDiffUtil
@@ -23,8 +23,8 @@ class FavouriteRecipesAdapter(
     private var multiSelection = false
     private lateinit var mActionMode: ActionMode
     //TODO difference between array,list and arrayList
-    private var selectedRecipes = arrayListOf<FavouriteEntity>()
-    private var favouriteRecipes = emptyList<FavouriteEntity>()
+    private var selectedRecipes = arrayListOf<FavouritesEntity>()
+    private var favouriteRecipes = emptyList<FavouritesEntity>()
     private var myViewHolders = arrayListOf<MyViewHolder>()
 
     init {
@@ -33,7 +33,7 @@ class FavouriteRecipesAdapter(
     class MyViewHolder(private val binding: FavouriteRecipesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(favouriteEntity: FavouriteEntity) {
+        fun bind(favouriteEntity: FavouritesEntity) {
             binding.favouriteEntity = favouriteEntity
             binding.executePendingBindings()
         }
@@ -56,6 +56,8 @@ class FavouriteRecipesAdapter(
         myViewHolders.add(holder)
         val currentRecipe = favouriteRecipes[position]
         holder.bind(currentRecipe)
+
+        saveItemStateOnScroll(currentRecipe, holder)
 
         /**
          * Single click listener*
@@ -81,17 +83,23 @@ class FavouriteRecipesAdapter(
                 requireActivity.startActionMode(this)
                 multiSelection = true
                 applySelection(holder, currentRecipe)
-
                 true
             } else {
-                multiSelection = false
-                false
+                applySelection(holder, currentRecipe)
+                true
             }
         }
-
+    }
+    private fun saveItemStateOnScroll(currentRecipe: FavouritesEntity, holder: MyViewHolder){
+        if (selectedRecipes.contains(currentRecipe)) {
+            changeRecipeStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
+        } else {
+            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+        }
     }
 
-    private fun applySelection(holder: MyViewHolder, currentRecipe: FavouriteEntity) {
+
+    private fun applySelection(holder: MyViewHolder, currentRecipe: FavouritesEntity) {
         if (selectedRecipes.contains(currentRecipe)) {
             selectedRecipes.remove(currentRecipe)
             changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
@@ -164,6 +172,7 @@ class FavouriteRecipesAdapter(
         when (selectedRecipes.size) {
             0 -> {
                 mActionMode.finish()
+                multiSelection = false
             }
             1 -> {
                 mActionMode.title = "${selectedRecipes.size} item selected"
@@ -180,7 +189,7 @@ class FavouriteRecipesAdapter(
     }
 
 
-    fun setData(newFavouriteRecipes: List<FavouriteEntity>) {
+    fun setData(newFavouriteRecipes: List<FavouritesEntity>) {
         val recipesDiffUtil = RecipesDiffUtil(favouriteRecipes, newFavouriteRecipes)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
         favouriteRecipes = newFavouriteRecipes

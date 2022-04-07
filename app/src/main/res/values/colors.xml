@@ -40,4 +40,7 @@
     <color name="statusBarColor">@color/colorPrimaryDark</color>
     <color name="contextualActionBarColor">@color/dark</color>
 
+    //Light theme
+    <color name="backgroundColor">@color/lightGray</color>
+
 </resources>

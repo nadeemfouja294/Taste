@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.logical.taste.R
 import com.logical.taste.adapter.RecipesAdapter
 import com.logical.taste.databinding.FragmentRecipesBinding
@@ -20,7 +21,6 @@ import com.logical.taste.util.observeOnce
 import com.logical.taste.viewmodels.MainViewModel
 import com.logical.taste.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -55,12 +55,12 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
         setHasOptionsMenu(true)
 
-        setupRecycleView()
+        setupRecycleView(binding.recyclerview)
 
         recipesViewModel.readBackOnline.observe(viewLifecycleOwner) {
             recipesViewModel.backOnline = it
         }
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             networkListener.checkNetworkAvailability(requireContext()).collect { status ->
                 recipesViewModel.networkStatus = status
                 recipesViewModel.showNetworkStatus()
@@ -99,7 +99,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     Log.i(TAG, "readDatabase is called")
                     mAdapter.setData(database[0].foodRecipe)
@@ -107,14 +107,14 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                 } else {
                     requestApiData()
                 }
-            })
+            }
         }
     }
 
     private fun requestApiData() {
 
         mainViewModel.getRecipes(recipesViewModel.applyQueries())
-        mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
+        mainViewModel.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
@@ -133,18 +133,19 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                     showShimmerEffect()
                 }
             }
-        })
+        }
     }
 
     private fun searchApiData(query: String) {
         showShimmerEffect()
         mainViewModel.searchRecipes(recipesViewModel.applySearchQueries(query))
-        mainViewModel.searchRecipesResponse.observe(viewLifecycleOwner, { response ->
+        mainViewModel.searchedRecipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
                     response.data?.let {
-                        mAdapter.setData(it) }
+                        mAdapter.setData(it)
+                    }
                 }
                 is NetworkResult.Error -> {
                     loadDataFromCache()
@@ -159,32 +160,38 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                     showShimmerEffect()
                 }
             }
-        })
+        }
     }
 
     private fun loadDataFromCache() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+            mainViewModel.readRecipes.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty())
                     mAdapter.setData(database[0].foodRecipe)
 
-            })
+            }
         }
     }
 
 
-    private fun setupRecycleView() {
-        binding.recycleView.adapter = mAdapter
-        binding.recycleView.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecycleView(recyclerview: RecyclerView) {
+        recyclerview.adapter = mAdapter
+        recyclerview.layoutManager = LinearLayoutManager(requireContext())
         showShimmerEffect()
     }
 
     private fun showShimmerEffect() {
-        binding.recycleView.showShimmer()
+       // binding.recycleView.showShimmer()
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.recyclerview.visibility = View.GONE
     }
 
     private fun hideShimmerEffect() {
-        binding.recycleView.hideShimmer()
+       // binding.recycleView.hideShimmer()
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.GONE
+        binding.recyclerview.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

@@ -115,8 +115,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/red"
                     android:layout_marginTop="8dp"
-                    android:text="100"
-                    setNoOfLikes="@{result.aggregateLikes}"
+                    android:text="@{String.valueOf(result.aggregateLikes)}"
                     android:textAlignment="center"
                     app:layout_constraintStart_toStartOf="@+id/description_textView"
                     app:layout_constraintTop_toBottomOf="@+id/heart_imageView" />
@@ -139,8 +138,7 @@
                     android:textColor="@color/yellow"
                     android:layout_marginStart="36dp"
                     android:layout_marginTop="8dp"
-                    android:text="100"
-                    setNoOfMinutes="@{result.readyInMinutes}"
+                    android:text="@{String.valueOf(result.readyInMinutes)}"
                     android:textAlignment="center"
                     app:layout_constraintStart_toEndOf="@+id/heart_textView"
                     app:layout_constraintTop_toBottomOf="@+id/clock_imageView" />

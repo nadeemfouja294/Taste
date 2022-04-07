@@ -1,7 +1,6 @@
 package com.logical.taste.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -10,28 +9,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.logical.taste.R
-import com.logical.taste.adapter.PagerAdapter
-import com.logical.taste.data.database.entities.FavouriteEntity
+import com.logical.taste.data.database.entities.FavouritesEntity
+import com.logical.taste.databinding.ActivityDetailsBinding
 import com.logical.taste.ui.fragments.ingredients.IngredientsFragment
 import com.logical.taste.ui.fragments.instructions.InstructionsFragment
 import com.logical.taste.ui.fragments.overview.OverviewFragment
-import com.logical.taste.util.Constants.Companion.RECIPE_RESULT_KEY
 import com.logical.taste.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_details.*
-import java.lang.Exception
 
 @AndroidEntryPoint
 class DetailsActivity : AppCompatActivity() {
     private val args by navArgs<DetailsActivityArgs>()
     private val mainViewModel: MainViewModel by viewModels()
+    private  var _binding:ActivityDetailsBinding?=null
+    private val binding get() = _binding!!
+    private lateinit var star_menuItem:MenuItem
     private var recipeSaved = false
     private var savedRecipeId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+        _binding = ActivityDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setSupportActionBar(toolBar)
         toolBar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
@@ -50,41 +51,44 @@ class DetailsActivity : AppCompatActivity() {
         val resultBundle = Bundle()
         resultBundle.putParcelable("recipeBundle", args.result)
 
-        val adapter = com.logical.taste.adapter.PagerAdapter(
+        val pagerAdapter = com.logical.taste.adapter.PagerAdapter(
             resultBundle,
             fragments,
-            titles,
-            supportFragmentManager
+         this
         )
-        viewPager.adapter = adapter
-        tabLayout.setupWithViewPager(viewPager)
+        binding.viewPager2.isUserInputEnabled = false
+        binding.viewPager2.apply {
+            adapter = pagerAdapter
+        }
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.details_menu, menu)
-        val star_menuItem = menu?.findItem(R.id.save_to_favourite_menu)
+         star_menuItem = menu!!.findItem(R.id.save_to_favourite_menu)
         //TODO change function name to checkFavouriteRecipes
-        checkSavedRecipes(star_menuItem!!)
+        checkSavedRecipes(star_menuItem)
         return true
     }
 
     private fun checkSavedRecipes(star_menuItem: MenuItem) {
-        mainViewModel.readFavouriteRecipes.observe(this, { favouriteEntity ->
+        mainViewModel.readFavouriteRecipes.observe(this) { favouriteEntity ->
             try {
                 for (savedRecipe in favouriteEntity) {
                     if (savedRecipe.result.id == args.result.id) {
                         changeMenuItemColor(star_menuItem, R.color.yellow)
                         savedRecipeId = savedRecipe.id
-                        recipeSaved=true
+                        recipeSaved = true
 
-                    } else {
-                        changeMenuItemColor(star_menuItem, R.color.white)
                     }
                 }
             } catch (e: Exception) {
                 Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -99,7 +103,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun saveToFavourites(item: MenuItem) {
-        val favouriteEntity = FavouriteEntity(
+        val favouriteEntity = FavouritesEntity(
             0,
             args.result
         )
@@ -110,7 +114,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun removeFromFavourites(item: MenuItem) {
-        val favouriteEntity = FavouriteEntity(
+        val favouriteEntity = FavouritesEntity(
             savedRecipeId,
             args.result
         )
@@ -240,6 +244,10 @@ class DetailsActivity : AppCompatActivity() {
 //
 //
 //
-
+override fun onDestroy() {
+    super.onDestroy()
+    changeMenuItemColor(star_menuItem, R.color.white)
+    _binding = null
+}
 
 }

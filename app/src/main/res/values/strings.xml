@@ -45,5 +45,6 @@
     <string name="time">100</string>
     <string name="save_to_favourite">Save to Favourite</string>
     <string name="no_favourite_recipe">No Favourite Recipe</string>
-
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </string>
+    <string name="share">Share</string>
 </resources>
